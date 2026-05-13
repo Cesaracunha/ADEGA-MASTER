@@ -1,0 +1,95 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "A product in the inventory",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "category": { "type": "string" },
+        "barcode": { "type": "string" },
+        "stock": { "type": "number" },
+        "price": { "type": "number" }
+      },
+      "required": ["id", "name", "category", "barcode", "stock", "price"]
+    },
+    "CartItem": {
+      "title": "CartItem",
+      "description": "An item in a sale or vale",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "product": { "$ref": "#/entities/Product" },
+        "quantity": { "type": "number" },
+        "subtotal": { "type": "number" }
+      },
+      "required": ["id", "product", "quantity", "subtotal"]
+    },
+    "Sale": {
+      "title": "Sale",
+      "description": "A completed or pending sale",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "date": { "type": "string" },
+        "items": { "type": "array" },
+        "total": { "type": "number" },
+        "discount": { "type": "number" },
+        "finalTotal": { "type": "number" },
+        "paymentMethod": { "type": "string" },
+        "amountPaid": { "type": "number" },
+        "change": { "type": "number" },
+        "status": { "type": "string" }
+      },
+      "required": ["id", "date", "items", "total", "discount", "finalTotal", "amountPaid", "change", "status"]
+    },
+    "Vale": {
+      "title": "Vale",
+      "description": "An unpaid or paid store credit (fiado)",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "customerName": { "type": "string" },
+        "date": { "type": "string" },
+        "items": { "type": "array" },
+        "total": { "type": "number" },
+        "status": { "type": "string" }
+      },
+      "required": ["id", "customerName", "date", "items", "total", "status"]
+    },
+    "InventoryLog": {
+      "title": "InventoryLog",
+      "description": "A log of inventory changes",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "date": { "type": "string" },
+        "productId": { "type": "string" },
+        "productName": { "type": "string" },
+        "type": { "type": "string" },
+        "quantity": { "type": "number" },
+        "reason": { "type": "string" }
+      },
+      "required": ["id", "date", "productId", "productName", "type", "quantity", "reason"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/products/{productId}": {
+      "schema": "#/entities/Product",
+      "description": "Products for a user"
+    },
+    "/users/{userId}/sales/{saleId}": {
+      "schema": "#/entities/Sale",
+      "description": "Sales records for a user"
+    },
+    "/users/{userId}/vales/{valeId}": {
+      "schema": "#/entities/Vale",
+      "description": "Vales (store credit) for a user"
+    },
+    "/users/{userId}/inventoryLogs/{logId}": {
+      "schema": "#/entities/InventoryLog",
+      "description": "Inventory change logs for a user"
+    }
+  }
+}

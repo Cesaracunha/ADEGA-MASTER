@@ -1,0 +1,8 @@
+{
+  "name": "Adega Master",
+
+
+  "description": "Sistema de PDV para Adegas com controle de vendas, estoque, vendas por código de barras, fiados (vales) e dashboard completo.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

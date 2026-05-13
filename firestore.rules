@@ -1,0 +1,37 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Basic helper functions
+    function isSignedIn() { return request.auth != null; }
+    function isOwner(userId) { return request.auth.uid == userId; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    match /users/{userId} {
+      match /products/{productId} {
+        allow get: if isSignedIn() && isOwner(userId) && isValidId(productId);
+        allow list: if isSignedIn() && isOwner(userId);
+        allow write: if isSignedIn() && isOwner(userId) && isValidId(productId);
+      }
+      match /sales/{saleId} {
+        allow get: if isSignedIn() && isOwner(userId) && isValidId(saleId);
+        allow list: if isSignedIn() && isOwner(userId);
+        allow write: if isSignedIn() && isOwner(userId) && isValidId(saleId);
+      }
+      match /vales/{valeId} {
+        allow get: if isSignedIn() && isOwner(userId) && isValidId(valeId);
+        allow list: if isSignedIn() && isOwner(userId);
+        allow write: if isSignedIn() && isOwner(userId) && isValidId(valeId);
+      }
+      match /inventoryLogs/{logId} {
+        allow get: if isSignedIn() && isOwner(userId) && isValidId(logId);
+        allow list: if isSignedIn() && isOwner(userId);
+        allow write: if isSignedIn() && isOwner(userId) && isValidId(logId);
+      }
+    }
+  }
+}
